@@ -16,6 +16,7 @@ var LANGS = {
     "MySQL": [13,"text/x-sql"],
     "Perl": [14, "text/x-perl"],
     "Rust": [15, "text/rust"],
+    "Python3": [16, "text/x-python3"]
 }
 
 
@@ -37,5 +38,6 @@ var Codes = {
     "Scala": "object HelloWorld {def main(args: Array[String]) = println(\"Hello\")}",
     "VB.NET": "Imports System\n\nPublic Class Test\n\tPublic Shared Sub Main() \n    \tSystem.Console.WriteLine(\"Hello\")\n\tEnd Sub\nEnd Class",
     "Rust": "fn main() {\n\tprintln!(\"Hello\");\n}",
+    "Python3": "print (\"Hello\")"
 }
 

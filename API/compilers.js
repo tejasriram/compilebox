@@ -31,4 +31,5 @@ exports.compilerArray= [ ["python","file.py","","Python",""],
 			 ["gcc ","file.m"," /usercode/a.out","Objective-C","\' -o /usercode/a.out -I/usr/include/GNUstep -L/usr/lib/GNUstep -lobjc -lgnustep-base -Wall -fconstant-string-class=NSConstantString\'"],
 			 ["/usercode/sql_runner.sh","file.sql","","MYSQL",""],
 			 ["perl","file.pl","","Perl",""],
-			 ["\'env HOME=/opt/rust /opt/rust/.cargo/bin/rustc\'","file.rs","/usercode/a.out","Rust","\'-o /usercode/a.out\'"] ];
+			 ["\'env HOME=/opt/rust /opt/rust/.cargo/bin/rustc\'","file.rs","/usercode/a.out","Rust","\'-o /usercode/a.out\'"],
+		         ["python3.6","file.py","","Python3",""] ];

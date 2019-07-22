@@ -46,51 +46,43 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
 
   var stdOut = [];
 
-  var asyncForEach = async (array, callback) => {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
-    }
-  };
+  stdinList.map(stdin => {
+    var folder = "temp/" + random(10); //folder in which the temporary folder will be saved
+    var path = __dirname + "/"; //current working path
+    var vm_name = "virtual_machine"; //name of virtual machine that we want to execute
+    var timeout_value = 20; //Timeout Value, In Seconds
 
-  var calculateOutput = async () => {
-    await asyncForEach(stdinList, async stdin => {
-      var folder = "temp/" + random(10); //folder in which the temporary folder will be saved
-      var path = __dirname + "/"; //current working path
-      var vm_name = "virtual_machine"; //name of virtual machine that we want to execute
-      var timeout_value = 20; //Timeout Value, In Seconds
+    //details of this are present in DockerSandbox.js
+    var sandboxType = new sandBox(
+      timeout_value,
+      path,
+      folder,
+      vm_name,
+      arr.compilerArray[language][0],
+      arr.compilerArray[language][1],
+      code,
+      arr.compilerArray[language][2],
+      arr.compilerArray[language][3],
+      arr.compilerArray[language][4],
+      stdin
+    );
 
-      //details of this are present in DockerSandbox.js
-      var sandboxType = await new sandBox(
-        timeout_value,
-        path,
-        folder,
-        vm_name,
-        arr.compilerArray[language][0],
-        arr.compilerArray[language][1],
-        code,
-        arr.compilerArray[language][2],
-        arr.compilerArray[language][3],
-        arr.compilerArray[language][4],
-        stdin
-      );
-
-      //data will contain the output of the compiled/interpreted code
-      //the result maybe normal program output, list of error messages or a Timeout error
-      sandboxType.run(function(data, exec_time, err) {
-        stdOut.push({
-          output: data,
-          langid: language,
-          code: code,
-          errors: err,
-          time: exec_time,
-          input: stdin
-        });
+    //data will contain the output of the compiled/interpreted code
+    //the result maybe normal program output, list of error messages or a Timeout error
+    sandboxType.run(function(data, exec_time, err) {
+      stdOut.push({
+        output: data,
+        langid: language,
+        code: code,
+        errors: err,
+        time: exec_time,
+        input: stdin
       });
     });
-    res.send(stdOut);
-  };
+    return;
+  });
 
-  calculateOutput();
+  res.send(stdOut);
 });
 
 app.get("/", function(req, res) {

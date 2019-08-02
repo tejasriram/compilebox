@@ -46,8 +46,8 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
 
   var stdOut = [];
 
-  var responsePromise = stdinList.reduce((result, stdin) => {
-    return result.then(() => {
+  var responsePromises = stdinList.map((stdin, index) => {
+      console.log("Started: ", index, " : ", stdin);
       return new Promise((resolve, reject) => {
         var folder = "temp/" + random(10); //folder in which the temporary folder will be saved
         var path = __dirname + "/"; //current working path
@@ -80,13 +80,13 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
             time: exec_time,
             input: stdin
           });
+	  console.log("completed: ", index, " : ", stdin)
           resolve();
         });
       });
-    });
-  }, Promise.resolve());
+  });
 
-  responsePromise.then(() => {
+  Promise.all(responsePromises).then(() => {
     res.send(stdOut);
   });
 

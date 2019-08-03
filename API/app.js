@@ -1,6 +1,4 @@
-/*
- *File: app.js
- *Author: Asad Memon / Osman Ali Mian
+/*Author: Asad Memon / Osman Ali Mian
  *Last Modified: 5th June 2014
  *Revised on: 30th June 2014 (Introduced Express-Brute for Bruteforce protection)
  */
@@ -20,6 +18,8 @@ var bruteforce = new ExpressBrute(store, {
   freeRetries: 50,
   lifetime: 3600
 });
+
+var COMPILATION_ERROR_STRING = "Compilation Failed\n";
 
 app.use(express.static(__dirname));
 app.use(bodyParser());
@@ -80,7 +80,7 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
           input: stdin
         });
         console.log("completed: ", index, " : ", stdin);
-        if (err) {
+        if (data === COMPILATION_ERROR_STRING) {
           reject();
         }
         resolve();
@@ -89,9 +89,10 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
 
     firstInputResponsePromise
       .then(() => {
-        stdOut = [];
         var responsePromises = stdinList.map((stdin, index) => {
-          console.log("Started: ", index, " : ", stdin);
+          if (index === 0) {
+            return Promise.resolve();
+          }
           return new Promise((resolve, reject) => {
             var folder = "temp/" + random(10); //folder in which the temporary folder will be saved
             var path = __dirname + "/"; //current working path
@@ -130,12 +131,21 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
           });
         });
 
-        Promise.all(responsePromises).then(() => {
-          res.send(stdOut);
+        return Promise.all(responsePromises).then(() => {
+          return {
+            results: stdOut,
+            is_compilation_error: false
+          };
         });
       })
       .catch(() => {
-        res.send(stdOut);
+        return {
+          results: stdOut,
+          is_compilation_error: true
+        };
+      })
+      .then(response => {
+        res.send(response);
       });
   }
 });
@@ -146,3 +156,4 @@ app.get("/", function(req, res) {
 
 console.log("Listening at " + port);
 server.listen(port);
+

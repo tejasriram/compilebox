@@ -48,6 +48,7 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
 
   if (Array.isArray(stdinList)) {
     var firstInputResponsePromise = new Promise((resolve, reject) => {
+      var stdin = stdinList[0]
       var folder = "temp/" + random(10); //folder in which the temporary folder will be saved
       var path = __dirname + "/"; //current working path
       var vm_name = "virtual_machine"; //name of virtual machine that we want to execute
@@ -79,7 +80,6 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
           time: exec_time,
           input: stdin
         });
-        console.log("completed: ", index, " : ", stdin);
         if (data === COMPILATION_ERROR_STRING) {
           reject();
         }
@@ -138,14 +138,14 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
           };
         });
       })
-      .catch(() => {
+      .catch((error) => {
         return {
           results: stdOut,
           is_compilation_error: true
         };
       })
       .then(response => {
-        res.send(response);
+	res.send(response);
       });
   }
 });

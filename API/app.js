@@ -48,7 +48,7 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
 
   if (Array.isArray(stdinList)) {
     var firstInputResponsePromise = new Promise((resolve, reject) => {
-      var stdin = stdinList[0]
+      var stdin = stdinList[0];
       var folder = "temp/" + random(10); //folder in which the temporary folder will be saved
       var path = __dirname + "/"; //current working path
       var vm_name = "virtual_machine"; //name of virtual machine that we want to execute
@@ -138,14 +138,15 @@ app.post("/compile", bruteforce.prevent, function(req, res) {
           };
         });
       })
-      .catch((error) => {
+      .catch(error => {
         return {
           results: stdOut,
           is_compilation_error: true
         };
       })
       .then(response => {
-	res.send(response);
+        console.log(response);
+        res.send(response);
       });
   }
 });
@@ -156,4 +157,3 @@ app.get("/", function(req, res) {
 
 console.log("Listening at " + port);
 server.listen(port);
-

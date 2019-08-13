@@ -10,7 +10,7 @@ var sandBox = require("./DockerSandbox");
 var bodyParser = require("body-parser");
 var app = express();
 var server = http.createServer(app);
-var port = 80;
+var port = 3000;
 
 var ExpressBrute = require("express-brute");
 var store = new ExpressBrute.MemoryStore(); // stores state locally, don't use this in production
